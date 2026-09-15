@@ -35,11 +35,68 @@ function normalizeUrl(raw: string): string {
   return url;
 }
 
+/**
+ * Finds the connection string, whatever the host chose to call it.
+ *
+ * Setting the variables by hand gives POSTGRES_URL or DATABASE_URL. Vercel's
+ * Supabase integration injects its own set instead — POSTGRES_PRISMA_URL,
+ * POSTGRES_URL_NON_POOLING, or only the component parts — so accepting a
+ * single name meant "connect Supabase in Vercel" appeared to work while every
+ * request still failed with "database is not configured".
+ *
+ * Ordered by preference: a pooled URL first (correct for serverless), then a
+ * direct one, then assembled from parts.
+ */
+function resolveConnectionString(): { url: string; source: string } | null {
+  const named: [string, string | undefined][] = [
+    ['POSTGRES_URL', process.env.POSTGRES_URL],
+    ['DATABASE_URL', process.env.DATABASE_URL],
+    ['POSTGRES_PRISMA_URL', process.env.POSTGRES_PRISMA_URL],
+    ['POSTGRES_URL_NON_POOLING', process.env.POSTGRES_URL_NON_POOLING],
+    ['SUPABASE_DB_URL', process.env.SUPABASE_DB_URL],
+  ];
+
+  for (const [name, value] of named) {
+    // A variable present but empty is worse than absent: it silently wins over
+    // a later one that would have worked.
+    if (value && value.trim() && !value.includes('<password>')) {
+      return { url: value.trim(), source: name };
+    }
+  }
+
+  // Last resort: the integration sometimes provides only the parts.
+  const host = process.env.POSTGRES_HOST;
+  const user = process.env.POSTGRES_USER;
+  const password = process.env.POSTGRES_PASSWORD;
+  const database = process.env.POSTGRES_DATABASE ?? 'postgres';
+  if (host && user && password) {
+    return {
+      url: `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:5432/${database}`,
+      source: 'POSTGRES_HOST/USER/PASSWORD',
+    };
+  }
+
+  return null;
+}
+
 export function getPool(): Pool {
   if (_pool) return _pool;
 
-  const raw = process.env.POSTGRES_URL || process.env.DATABASE_URL;
-  if (!raw) throw new Error('No database URL configured (set POSTGRES_URL or DATABASE_URL)');
+  const found = resolveConnectionString();
+  if (!found) {
+    // Name what WAS present, so the next person can see whether the variables
+    // are missing entirely or merely named something unexpected.
+    const seen = Object.keys(process.env)
+      .filter((k) => /^(POSTGRES|DATABASE|SUPABASE)/.test(k))
+      .sort();
+    throw new Error(
+      'No database URL configured (set POSTGRES_URL or DATABASE_URL). ' +
+        (seen.length
+          ? `Database-ish variables present: ${seen.join(', ')}.`
+          : 'No POSTGRES_*, DATABASE_* or SUPABASE_* variables are set at all.'),
+    );
+  }
+  const raw = found.url;
 
   const url = normalizeUrl(raw);
   const isLocal = url.includes('localhost') || url.includes('127.0.0.1');
