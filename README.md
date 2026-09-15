@@ -165,3 +165,5 @@ Without that step the old values stay baked in and nothing appears to change.
 3. **Replace the placeholder accreditation form** with the real one.
 4. **Build the supplier-facing UI pages** for orders, prices and invoices — the
    API routes exist and are typed, the screens are not built yet.
+
+<!-- deploy marker: 2026-09-15T06:36:34Z -->
