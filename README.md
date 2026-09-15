@@ -125,6 +125,34 @@ that create new commitments.
 | `npm run mail:test` | send a test email through the configured driver |
 | `node scripts/set-admin-login.mjs` | change an admin login in place, keeping the user id |
 
+## Deploying to Vercel
+
+`.env.local` is gitignored, so **nothing in it reaches production**. Every
+variable has to be set again in Vercel → Settings → Environment Variables.
+
+The branding ones are easy to miss, because leaving them out is not an error —
+the page just quietly falls back to a plain light layout with a text wordmark
+instead of the logo. That fallback is deliberate (a missing file should never
+render a broken image), which is exactly why the omission is silent:
+
+| Variable | Value |
+|---|---|
+| `NEXT_PUBLIC_HERO_VIDEO` | `/hero.mp4` |
+| `NEXT_PUBLIC_HERO_POSTER` | `/hero-poster.jpg` |
+| `NEXT_PUBLIC_HAS_LOGO` | `true` |
+| `NEXT_PUBLIC_LOGO_URL` | `/logo.png` |
+| `NEXT_PUBLIC_APP_NAME` | `Art Fresh` |
+| `NEXT_PUBLIC_APP_URL` | the deployment's own URL |
+
+Plus `POSTGRES_URL`, `DATABASE_URL`, `JWT_ACCESS_SECRET` and
+`JWT_REFRESH_SECRET` — the JWT secrets **different** from the customer
+portal's, or a token minted by one portal is accepted by the other.
+
+**Adding variables does not trigger a rebuild, and `NEXT_PUBLIC_*` values are
+compiled into the bundle at build time.** So after setting them: Deployments →
+⋯ on the latest → Redeploy, with **"Use existing Build Cache" unticked**.
+Without that step the old values stay baked in and nothing appears to change.
+
 ## Before this is used for real
 
 1. **Set `UPLOAD_DRIVER=supabase`** with a `supplier-docs` bucket plus
