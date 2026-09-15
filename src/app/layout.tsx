@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     default: `${COMPANY} Supplier Portal`,
     template: `%s · ${COMPANY}`,
   },
-  description: `Apply for a supplier account with ${COMPANY}, place orders, and track deliveries.`,
+  description: `Get accredited as a ${COMPANY} supplier, acknowledge purchase orders, and track your invoices.`,
   // Falls back to Next's default when no icon file is present, rather than
   // rendering a broken one.
   icons: process.env.NEXT_PUBLIC_HAS_LOGO === 'true'

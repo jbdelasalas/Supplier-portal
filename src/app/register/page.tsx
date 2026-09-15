@@ -68,7 +68,7 @@ export default function RegisterPage() {
 
       <h1 className="text-2xl font-bold text-slate-900">Create your account</h1>
       <p className="mt-2 text-sm text-slate-600">
-        You&apos;ll use this to fill in your application and, once approved, to place orders.
+        You&apos;ll use this to fill in your accreditation application and, once approved, to manage purchase orders and invoices.
       </p>
 
       <form onSubmit={submit} className="card mt-6 space-y-4 p-6">

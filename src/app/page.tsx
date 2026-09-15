@@ -10,16 +10,16 @@ const HERO_POSTER = process.env.NEXT_PUBLIC_HERO_POSTER;
 
 const FEATURES = [
   {
-    title: 'Apply online',
-    body: 'Fill in the application form, upload your documents, and track the review.',
+    title: 'Get accredited online',
+    body: 'Fill in the accreditation form, upload your permits, and track the review.',
   },
   {
-    title: 'Order at your price',
-    body: 'Your contracted rates are applied automatically at checkout.',
+    title: 'Acknowledge purchase orders',
+    body: 'See every order we issue you and confirm the delivery date you can meet.',
   },
   {
-    title: 'Follow every delivery',
-    body: 'See each order move from approval to truck assignment to delivered.',
+    title: 'Track your invoices',
+    body: 'Submit an invoice against a purchase order and follow it through to payment.',
   },
 ];
 
@@ -38,29 +38,29 @@ export default function HomePage() {
             onVideo ? 'text-white drop-shadow-lg' : 'text-slate-900'
           }`}
         >
-          From Our Farm to Your Business
+          Grow With Us as a Supplier
         </h1>
         <p
           className={`mt-3 text-xl font-medium sm:text-2xl ${
             onVideo ? 'text-accent-300 drop-shadow' : 'text-brand-600'
           }`}
         >
-          Apply for a supplier account Today.
+          Apply for accreditation today.
         </p>
         <p
           className={`mx-auto mt-6 max-w-2xl text-lg leading-relaxed ${
             onVideo ? 'text-white/90 drop-shadow' : 'text-slate-600'
           }`}
         >
-          Whether you&rsquo;re a restaurant, retailer, distributor, or food business,
-          we&rsquo;re here to support your growing needs with quality dressed chicken and
-          dependable supply. Apply for a supplier account and experience easier, faster,
-          and more convenient ordering.
+          Whether you supply feeds, veterinary products, packaging, equipment, or
+          hauling and services, we&rsquo;re looking for partners who deliver on time and
+          to standard. Get accredited to receive purchase orders, submit your price
+          list, and track every invoice through to payment.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link href="/register" className="btn-primary px-6 py-2.5">
-            Apply for a supplier account
+            Apply for accreditation
           </Link>
           <Link
             href="/login"

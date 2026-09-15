@@ -39,7 +39,7 @@ const CreateBody = z.object({
 export const POST = handler(async (request: NextRequest) => {
   const auth = await requireAuth(request);
   if (auth.userType !== 'supplier') {
-    return err('Only supplier accounts can file an application.', 403);
+    return err('Only supplier accounts can file an accreditation application.', 403);
   }
 
   const parsed = CreateBody.safeParse(await request.json().catch(() => null));
