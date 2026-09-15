@@ -1,0 +1,449 @@
+{
+  "_comment": [
+    "PLACEHOLDER accreditation form, modelled on what a Philippine poultry/feed",
+    "buyer normally asks a new supplier for. Replace it with the real form when",
+    "JC supplies it: edit this file and run `npm run db:seed`, which publishes a",
+    "NEW version rather than mutating v1. In-flight applications keep rendering",
+    "and validating against the version they started on.",
+    "",
+    "Every `mapsTo` must name a column in SUPPLIER_COLUMNS in src/lib/forms.ts;",
+    "anything else is ignored on approval, so a hand-edit here cannot write to",
+    "payment_terms_days, ewt_rate or status."
+  ],
+  "code": "supplier_accreditation",
+  "name": "Supplier Accreditation Application",
+  "description": "Apply to become an accredited supplier. Have your registration papers, tax documents and bank details to hand before you start — you can save a draft and come back.",
+  "kind": "supplier_accreditation",
+  "version": 1,
+  "changelog": "Initial placeholder form, pending the business's real accreditation format.",
+  "schema": {
+    "sections": [
+      {
+        "key": "business_info",
+        "title": "Business Information",
+        "description": "Your details exactly as they appear on your registration papers.",
+        "fields": [
+          {
+            "key": "legal_name",
+            "label": "Registered business name",
+            "type": "text",
+            "required": true,
+            "maxLength": 200,
+            "help": "As registered with SEC, DTI or CDA.",
+            "mapsTo": "suppliers.legal_name"
+          },
+          {
+            "key": "trade_name",
+            "label": "Trade name / doing business as",
+            "type": "text",
+            "maxLength": 200,
+            "help": "Leave blank if the same as above.",
+            "mapsTo": "suppliers.trade_name"
+          },
+          {
+            "key": "supplier_type",
+            "label": "Type of business",
+            "type": "select",
+            "required": true,
+            "options": [
+              { "value": "corporate", "label": "Corporation" },
+              { "value": "sole_proprietor", "label": "Sole proprietorship" },
+              { "value": "partnership", "label": "Partnership" },
+              { "value": "cooperative", "label": "Cooperative" },
+              { "value": "government", "label": "Government entity" },
+              { "value": "individual", "label": "Individual / freelancer" }
+            ],
+            "mapsTo": "suppliers.supplier_type"
+          },
+          {
+            "key": "category",
+            "label": "What do you supply?",
+            "type": "select",
+            "required": true,
+            "help": "Pick the closest match. You can add more items later.",
+            "options": [
+              { "value": "feeds", "label": "Feeds and feed ingredients" },
+              { "value": "veterinary", "label": "Veterinary medicine and vaccines" },
+              { "value": "day_old_chicks", "label": "Day-old chicks / breeding stock" },
+              { "value": "packaging", "label": "Packaging materials" },
+              { "value": "equipment", "label": "Farm and plant equipment" },
+              { "value": "logistics", "label": "Logistics and hauling" },
+              { "value": "fuel", "label": "Fuel and lubricants" },
+              { "value": "construction", "label": "Construction and maintenance" },
+              { "value": "services", "label": "Professional or manpower services" },
+              { "value": "other", "label": "Other" }
+            ],
+            "mapsTo": "suppliers.category"
+          },
+          {
+            "key": "category_other",
+            "label": "Please specify what you supply",
+            "type": "text",
+            "required": true,
+            "maxLength": 120,
+            "showIf": { "field": "category", "equals": "other" }
+          },
+          {
+            "key": "years_in_operation",
+            "label": "Years in operation",
+            "type": "number",
+            "required": true,
+            "min": 0,
+            "max": 200
+          },
+          {
+            "key": "business_type",
+            "label": "Nature of business",
+            "type": "text",
+            "maxLength": 120,
+            "placeholder": "e.g. Feed milling and distribution",
+            "mapsTo": "suppliers.business_type"
+          }
+        ]
+      },
+      {
+        "key": "registration",
+        "title": "Registration and Tax",
+        "fields": [
+          {
+            "key": "tin",
+            "label": "TIN",
+            "type": "text",
+            "required": true,
+            "pattern": "^[0-9]{3}-?[0-9]{3}-?[0-9]{3}(-?[0-9]{3,5})?$",
+            "placeholder": "000-000-000-00000",
+            "help": "Nine digits, plus the branch code if you have one.",
+            "mapsTo": "suppliers.tin"
+          },
+          {
+            "key": "vat_status",
+            "label": "VAT status",
+            "type": "radio",
+            "required": true,
+            "help": "This decides whether VAT is added to your quoted prices.",
+            "options": [
+              { "value": "vat", "label": "VAT registered" },
+              { "value": "non_vat", "label": "Non-VAT / percentage tax" },
+              { "value": "exempt", "label": "VAT exempt" },
+              { "value": "zero_rated", "label": "Zero rated" }
+            ],
+            "mapsTo": "suppliers.vat_status"
+          },
+          {
+            "key": "sec_dti_reg_no",
+            "label": "SEC / DTI / CDA registration number",
+            "type": "text",
+            "required": true,
+            "maxLength": 60,
+            "mapsTo": "suppliers.sec_dti_reg_no"
+          },
+          {
+            "key": "business_permit_no",
+            "label": "Mayor's permit number",
+            "type": "text",
+            "maxLength": 60,
+            "mapsTo": "suppliers.business_permit_no"
+          },
+          {
+            "key": "bir_cor_no",
+            "label": "BIR Certificate of Registration (2303) number",
+            "type": "text",
+            "maxLength": 60,
+            "mapsTo": "suppliers.bir_cor_no"
+          },
+          {
+            "key": "permit_expiry",
+            "label": "Mayor's permit expiry date",
+            "type": "date",
+            "help": "We use this to remind you before your accreditation lapses."
+          },
+          {
+            "key": "fda_note",
+            "label": "Suppliers of feeds, veterinary medicine or vaccines must attach their current FDA or Bureau of Animal Industry licence in the documents section below. We cannot accredit you without it.",
+            "type": "section_note",
+            "showIf": {
+              "field": "category",
+              "in": ["feeds", "veterinary", "day_old_chicks"]
+            }
+          }
+        ]
+      },
+      {
+        "key": "contact",
+        "title": "Contact Details",
+        "fields": [
+          {
+            "key": "contact_person",
+            "label": "Contact person",
+            "type": "text",
+            "required": true,
+            "maxLength": 160,
+            "mapsTo": "suppliers.contact_person"
+          },
+          {
+            "key": "contact_position",
+            "label": "Position",
+            "type": "text",
+            "maxLength": 120,
+            "mapsTo": "suppliers.contact_position"
+          },
+          {
+            "key": "email",
+            "label": "Business email",
+            "type": "email",
+            "required": true,
+            "help": "Purchase orders and payment advices go here.",
+            "mapsTo": "suppliers.email"
+          },
+          {
+            "key": "phone",
+            "label": "Landline",
+            "type": "phone",
+            "mapsTo": "suppliers.phone"
+          },
+          {
+            "key": "mobile",
+            "label": "Mobile",
+            "type": "phone",
+            "required": true,
+            "mapsTo": "suppliers.mobile"
+          },
+          {
+            "key": "business_address",
+            "label": "Business address",
+            "type": "textarea",
+            "required": true,
+            "mapsTo": "suppliers.business_address"
+          },
+          {
+            "key": "city",
+            "label": "City / municipality",
+            "type": "text",
+            "required": true,
+            "maxLength": 120,
+            "mapsTo": "suppliers.city"
+          },
+          {
+            "key": "province",
+            "label": "Province",
+            "type": "text",
+            "required": true,
+            "maxLength": 120,
+            "mapsTo": "suppliers.province"
+          },
+          {
+            "key": "postal_code",
+            "label": "Postal code",
+            "type": "text",
+            "maxLength": 20,
+            "mapsTo": "suppliers.postal_code"
+          },
+          {
+            "key": "pickup_same_as_business",
+            "label": "Goods are collected from the address above",
+            "type": "checkbox"
+          },
+          {
+            "key": "pickup_address",
+            "label": "Pickup / warehouse address",
+            "type": "textarea",
+            "required": true,
+            "showIf": { "field": "pickup_same_as_business", "equals": false },
+            "mapsTo": "suppliers.pickup_address"
+          },
+          {
+            "key": "pickup_map_url",
+            "label": "Google Maps link to the pickup address",
+            "type": "url",
+            "help": "Open Google Maps, find the location, tap Share and paste the link. This is what our drivers follow.",
+            "showIf": { "field": "pickup_same_as_business", "equals": false }
+          }
+        ]
+      },
+      {
+        "key": "commercial",
+        "title": "Commercial Terms",
+        "description": "What you are offering. These are proposals — final terms are agreed at accreditation.",
+        "fields": [
+          {
+            "key": "payment_terms_requested",
+            "label": "Payment terms you are asking for",
+            "type": "select",
+            "required": true,
+            "help": "Our standard is 30 days from receipt of a correct invoice.",
+            "options": [
+              { "value": "cod", "label": "Cash on delivery" },
+              { "value": "7", "label": "7 days" },
+              { "value": "15", "label": "15 days" },
+              { "value": "30", "label": "30 days" },
+              { "value": "45", "label": "45 days" },
+              { "value": "60", "label": "60 days" }
+            ]
+          },
+          {
+            "key": "lead_time_days",
+            "label": "Usual lead time in days",
+            "type": "number",
+            "required": true,
+            "min": 0,
+            "max": 365,
+            "help": "From our purchase order to delivery.",
+            "mapsTo": "suppliers.lead_time_days"
+          },
+          {
+            "key": "minimum_order",
+            "label": "Minimum order value, if any",
+            "type": "number",
+            "min": 0,
+            "placeholder": "0"
+          },
+          {
+            "key": "delivery_capability",
+            "label": "Can you deliver to our sites?",
+            "type": "radio",
+            "required": true,
+            "options": [
+              { "value": "we_deliver", "label": "Yes, we deliver" },
+              { "value": "pickup", "label": "No, goods must be collected" },
+              { "value": "both", "label": "Either, depending on volume" }
+            ]
+          },
+          {
+            "key": "major_clients",
+            "label": "Three current clients we may contact for a reference",
+            "type": "textarea",
+            "required": true,
+            "help": "Company name, contact person and number for each."
+          }
+        ]
+      },
+      {
+        "key": "banking",
+        "title": "Bank Details for Payment",
+        "description": "Where we remit payment. Check these carefully — a wrong account number delays your payment.",
+        "fields": [
+          {
+            "key": "bank_name",
+            "label": "Bank",
+            "type": "text",
+            "required": true,
+            "maxLength": 160,
+            "mapsTo": "suppliers.bank_name"
+          },
+          {
+            "key": "bank_branch",
+            "label": "Branch",
+            "type": "text",
+            "maxLength": 160,
+            "mapsTo": "suppliers.bank_branch"
+          },
+          {
+            "key": "bank_account_name",
+            "label": "Account name",
+            "type": "text",
+            "required": true,
+            "maxLength": 200,
+            "help": "Must match your registered business name.",
+            "mapsTo": "suppliers.bank_account_name"
+          },
+          {
+            "key": "bank_account_no",
+            "label": "Account number",
+            "type": "text",
+            "required": true,
+            "maxLength": 60,
+            "mapsTo": "suppliers.bank_account_no"
+          },
+          {
+            "key": "bank_confirm",
+            "label": "I confirm these bank details are correct and belong to the business named above.",
+            "type": "checkbox",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "documents": [
+      {
+        "key": "sec_dti_reg",
+        "label": "SEC / DTI / CDA Registration",
+        "required": true,
+        "accept": ["application/pdf", "image/*"],
+        "maxSizeMb": 10
+      },
+      {
+        "key": "bir_2303",
+        "label": "BIR Certificate of Registration (Form 2303)",
+        "required": true,
+        "accept": ["application/pdf", "image/*"],
+        "maxSizeMb": 10
+      },
+      {
+        "key": "mayors_permit",
+        "label": "Current Mayor's Permit",
+        "required": true,
+        "accept": ["application/pdf", "image/*"],
+        "maxSizeMb": 10
+      },
+      {
+        "key": "bank_proof",
+        "label": "Proof of bank account (passbook page or bank certificate)",
+        "required": true,
+        "accept": ["application/pdf", "image/*"],
+        "maxSizeMb": 10
+      },
+      {
+        "key": "fda_bai_licence",
+        "label": "FDA or Bureau of Animal Industry licence",
+        "required": false,
+        "accept": ["application/pdf", "image/*"],
+        "maxSizeMb": 10
+      },
+      {
+        "key": "price_list",
+        "label": "Current price list or quotation",
+        "required": true,
+        "accept": ["application/pdf", "image/*", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+        "maxSizeMb": 10
+      },
+      {
+        "key": "company_profile",
+        "label": "Company profile",
+        "required": false,
+        "accept": ["application/pdf"],
+        "maxSizeMb": 20
+      },
+      {
+        "key": "audited_fs",
+        "label": "Latest audited financial statements",
+        "required": false,
+        "accept": ["application/pdf"],
+        "maxSizeMb": 20,
+        "maxSizeMbNote": "Asked for larger orders and credit terms."
+      }
+    ],
+    "photos": [
+      {
+        "key": "premises_photo",
+        "label": "Photo of your plant, warehouse or office",
+        "hint": "Stand far enough back that the building and any signage are visible.",
+        "facing": "environment",
+        "required": true
+      }
+    ],
+    "signature": {
+      "key": "applicant_signature",
+      "label": "Authorised signatory",
+      "required": true,
+      "declarationText": "I certify that the information and documents in this application are true, correct and complete. I am authorised to submit it on behalf of the business named above. I understand that any false statement or forged document is grounds for immediate rejection or removal from the accredited supplier list, and that accreditation does not by itself guarantee any purchase order or minimum volume."
+    },
+    "notarisedDocument": {
+      "key": "notarised_application",
+      "label": "Notarised copy of this application",
+      "hint": "Print the completed application, have it signed before a notary, then upload the scan here.",
+      "required": false,
+      "accept": ["application/pdf", "image/*"],
+      "maxSizeMb": 15
+    }
+  }
+}
