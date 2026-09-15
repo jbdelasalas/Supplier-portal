@@ -2,11 +2,21 @@ import Link from 'next/link';
 import Logo from '@/components/Logo';
 import VideoBackground from '@/components/VideoBackground';
 
-// Set NEXT_PUBLIC_HERO_VIDEO to a path under /public (e.g. "/hero.mp4") to
-// turn the background on. Without it the page keeps its plain light styling,
-// so a missing file can never leave the landing page unreadable.
-const HERO_VIDEO = process.env.NEXT_PUBLIC_HERO_VIDEO;
-const HERO_POSTER = process.env.NEXT_PUBLIC_HERO_POSTER;
+// hero.mp4 and hero-poster.jpg are committed in public/, so they exist in every
+// deployment — these default to them rather than requiring an env var.
+//
+// They were opt-in originally, on the reasoning that a missing file should
+// never leave the landing page unreadable. But the failure mode that actually
+// happened was the opposite one: the files WERE deployed and the variable was
+// not (Vercel never sees .env.local), so production quietly served the plain
+// page with no way to tell that from an intentional choice.
+//
+// VideoBackground still degrades safely on its own — it falls back to the
+// poster on a load error or when the visitor prefers reduced motion — so the
+// guard that mattered is kept and the one that misfired is gone.
+// Set NEXT_PUBLIC_HERO_VIDEO="" to deliberately turn the background off.
+const HERO_VIDEO = process.env.NEXT_PUBLIC_HERO_VIDEO ?? '/hero.mp4';
+const HERO_POSTER = process.env.NEXT_PUBLIC_HERO_POSTER ?? '/hero-poster.jpg';
 
 const FEATURES = [
   {

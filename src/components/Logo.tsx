@@ -10,8 +10,17 @@ import Image from 'next/image';
  */
 
 const LOGO_SRC = process.env.NEXT_PUBLIC_LOGO_URL ?? '/logo.png';
-const COMPANY = process.env.NEXT_PUBLIC_APP_NAME ?? 'Artfresh';
-const HAS_LOGO = process.env.NEXT_PUBLIC_HAS_LOGO === 'true';
+// Matches the default in app/layout.tsx. These disagreed once — layout said
+// "Art Fresh", this said "Artfresh" — which made a missing env var look like a
+// caching problem rather than a missing variable.
+const COMPANY = process.env.NEXT_PUBLIC_APP_NAME ?? 'Art Fresh';
+
+// public/logo.png is committed, so it is present in every deployment.
+// Default to ON: requiring NEXT_PUBLIC_HAS_LOGO=true meant any environment
+// where it was not set — Vercel, which never sees .env.local — silently
+// rendered the text wordmark instead of the brand mark, with nothing to
+// explain why. Set it to "false" to deliberately force the wordmark.
+const HAS_LOGO = process.env.NEXT_PUBLIC_HAS_LOGO !== 'false';
 
 // The Art Fresh badge is a tall oval (850 x 1190, roughly 5:7), not a wide
 // wordmark. Width is derived from that ratio so the mark keeps its proportions
