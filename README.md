@@ -64,7 +64,7 @@ The form is a JSON schema in `supplier.form_versions.schema`, seeded from
 `db/seeds/supplier_accreditation_form.json`. The UI renders whatever it finds
 there.
 
-**The seeded form is a placeholder** modelled on what a Philippine poultry/feed
+**The seeded form is a placeholder** modelled on what a Philippine poultry
 buyer normally asks for. Replacing it with the real one is a seed edit plus
 `npm run db:seed` — never a component rewrite. Re-seeding publishes a **new
 version** and retires the old one; applications already in flight keep

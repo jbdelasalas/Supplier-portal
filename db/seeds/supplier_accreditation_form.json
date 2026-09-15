@@ -1,6 +1,6 @@
 {
   "_comment": [
-    "PLACEHOLDER accreditation form, modelled on what a Philippine poultry/feed",
+    "PLACEHOLDER accreditation form, modelled on what a Philippine poultry",
     "buyer normally asks a new supplier for. Replace it with the real form when",
     "JC supplies it: edit this file and run `npm run db:seed`, which publishes a",
     "NEW version rather than mutating v1. In-flight applications keep rendering",
@@ -14,8 +14,8 @@
   "name": "Supplier Accreditation Application",
   "description": "Apply to become an accredited supplier. Have your registration papers, tax documents and bank details to hand before you start — you can save a draft and come back.",
   "kind": "supplier_accreditation",
-  "version": 1,
-  "changelog": "Initial placeholder form, pending the business's real accreditation format.",
+  "version": 2,
+  "changelog": "Removed the feeds category; the FDA/BAI licence note now applies to veterinary and live-bird suppliers only.",
   "schema": {
     "sections": [
       {
@@ -62,7 +62,6 @@
             "required": true,
             "help": "Pick the closest match. You can add more items later.",
             "options": [
-              { "value": "feeds", "label": "Feeds and feed ingredients" },
               { "value": "veterinary", "label": "Veterinary medicine and vaccines" },
               { "value": "day_old_chicks", "label": "Day-old chicks / breeding stock" },
               { "value": "packaging", "label": "Packaging materials" },
@@ -96,7 +95,7 @@
             "label": "Nature of business",
             "type": "text",
             "maxLength": 120,
-            "placeholder": "e.g. Feed milling and distribution",
+            "placeholder": "e.g. Packaging manufacturing and distribution",
             "mapsTo": "suppliers.business_type"
           }
         ]
@@ -159,11 +158,11 @@
           },
           {
             "key": "fda_note",
-            "label": "Suppliers of feeds, veterinary medicine or vaccines must attach their current FDA or Bureau of Animal Industry licence in the documents section below. We cannot accredit you without it.",
+            "label": "Suppliers of veterinary medicine, vaccines or live birds must attach their current FDA or Bureau of Animal Industry licence in the documents section below. We cannot accredit you without it.",
             "type": "section_note",
             "showIf": {
               "field": "category",
-              "in": ["feeds", "veterinary", "day_old_chicks"]
+              "in": ["veterinary", "day_old_chicks"]
             }
           }
         ]

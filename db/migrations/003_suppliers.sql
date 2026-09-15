@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS supplier.suppliers (
   supplier_type      varchar(30) NOT NULL DEFAULT 'corporate'
                      CHECK (supplier_type IN ('corporate', 'sole_proprietor', 'partnership',
                                               'cooperative', 'government', 'individual')),
-  -- What they supply: feeds, medication, packaging, logistics, services…
+  -- What they supply: medication, packaging, logistics, services…
   category           varchar(120),
   business_type      varchar(120),
 

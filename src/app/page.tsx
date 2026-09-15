@@ -52,10 +52,10 @@ export default function HomePage() {
             onVideo ? 'text-white/90 drop-shadow' : 'text-slate-600'
           }`}
         >
-          Whether you supply feeds, veterinary products, packaging, equipment, or
-          hauling and services, we&rsquo;re looking for partners who deliver on time and
-          to standard. Get accredited to receive purchase orders, submit your price
-          list, and track every invoice through to payment.
+          Whether you supply veterinary products, packaging, equipment, or hauling and
+          services, we&rsquo;re looking for partners who deliver on time and to standard.
+          Get accredited to receive purchase orders, submit your price list, and track
+          every invoice through to payment.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">

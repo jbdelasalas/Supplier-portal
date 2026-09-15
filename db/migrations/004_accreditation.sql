@@ -145,7 +145,7 @@ END$$;
 -- Uploaded documents
 --
 -- Supplier accreditation is document-heavy: permits, tax clearance, insurance,
--- and for a feed or medication supplier the FDA/BAI licence. `expires_at` is
+-- and for a medication or live-bird supplier the FDA/BAI licence. `expires_at` is
 -- the difference from the customer side — a certificate that has lapsed is
 -- worse than a missing one, because it looks complete on file.
 -- ============================================================================
