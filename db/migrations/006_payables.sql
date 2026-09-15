@@ -9,7 +9,7 @@
 -- payable — so an invoice arrives as 'submitted', not as a receivable, and
 -- has to survive matching against the PO and the goods actually received.
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 CREATE TABLE IF NOT EXISTS supplier.bills (
   id             uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

@@ -28,7 +28,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE EXTENSION IF NOT EXISTS "citext";
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 -- Keeps updated_at honest without every caller remembering to set it.
 -- Namespaced into `supplier` so it cannot redefine the customer portal's copy.

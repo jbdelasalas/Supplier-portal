@@ -212,7 +212,10 @@ async function main() {
       await client.query('BEGIN');
       // Belt and braces: even if a migration forgets its own SET LOCAL, an
       // unqualified object lands in supplier rather than public.
-      await client.query(`SET LOCAL search_path = ${SCHEMA}, public`);
+      // `extensions` is on the path because Supabase installs uuid-ossp and
+      // pgcrypto there rather than in public (citext does land in public), so
+      // uuid_generate_v4() in a DEFAULT clause cannot resolve without it.
+      await client.query(`SET LOCAL search_path = ${SCHEMA}, public, extensions`);
       await client.query(sql);
       await client.query(
         `INSERT INTO ${SCHEMA}.schema_migrations (filename, checksum) VALUES ($1, $2)`,

@@ -8,7 +8,7 @@
 -- Changing the accreditation form is therefore a seed edit plus db:seed, never
 -- a component rewrite.
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 -- ============================================================================
 -- Form definitions

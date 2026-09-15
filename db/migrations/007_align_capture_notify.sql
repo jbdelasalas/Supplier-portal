@@ -18,7 +18,7 @@
 -- Written as an idempotent reconciliation rather than by editing 004, because
 -- 004 may already have been applied.
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 -- ============================================================================
 -- application_documents — camera captures

@@ -7,7 +7,7 @@
 -- acknowledged by the supplier, never the other way round — which is why
 -- there is no supplier-facing "create PO" route anywhere in this codebase.
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 -- ============================================================================
 -- Items we buy. Mastered in the ERP eventually; `erp_ref` is the hook.

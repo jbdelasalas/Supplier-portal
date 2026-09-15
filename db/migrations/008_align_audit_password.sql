@@ -5,7 +5,7 @@
 -- Same reasoning as 007: these routes are proven code from the customer
 -- portal, so the schema meets them rather than the other way round.
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 -- ============================================================================
 -- audit_log — 006 named these actor_user_id / entity_type / before_data /

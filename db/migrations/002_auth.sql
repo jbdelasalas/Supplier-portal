@@ -10,7 +10,7 @@
 -- supplier and a customer signs up separately in each portal; the accounts
 -- are unrelated by design.
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 CREATE TABLE IF NOT EXISTS supplier.users (
   id                uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

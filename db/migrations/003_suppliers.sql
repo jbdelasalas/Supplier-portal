@@ -11,7 +11,7 @@
 --   * category / lead_time_days / minimum_order_value drive purchasing
 --     decisions and have no customer-side equivalent.
 
-SET LOCAL search_path = supplier, public;
+SET LOCAL search_path = supplier, public, extensions;
 
 CREATE TABLE IF NOT EXISTS supplier.suppliers (
   id                 uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
