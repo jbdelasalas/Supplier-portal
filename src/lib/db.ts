@@ -113,19 +113,26 @@ export function getPool(): Pool {
     // Applied by the server to every session this pool opens. Set here rather
     // than per query because the transaction pooler may hand a later query a
     // different backend — a one-off SET would not follow it.
-    options: `-c search_path=${SCHEMA}`,
+    // `extensions` is on the path because Supabase installs uuid-ossp and
+    // pgcrypto there, and column DEFAULTs call uuid_generate_v4() on insert.
+    // `public` stays OFF the path: that is what stops an unqualified name in
+    // application code resolving to another system's table.
+    options: `-c search_path=${SCHEMA},extensions`,
   };
 
   _pool = new Pool(cfg);
 
-  // Belt and braces: if `options` is ever stripped by a pooler, this still
-  // pins each fresh connection before the app runs a query on it.
-  _pool.on('connect', (client) => {
-    client.query(`SET search_path = ${SCHEMA}`).catch(() => {
-      /* the query that follows will surface any real problem */
-    });
-  });
-
+  // NO 'connect' handler firing its own SET here, deliberately.
+  //
+  // A `client.query()` in that handler is not awaited by the pool, so it races
+  // the first real query on the same client. Against Supabase's transaction
+  // pooler that surfaces as "Calling client.query() when the client is already
+  // executing a query" and the request fails with a 500 — which is exactly
+  // what production did, while local development (session mode, one client per
+  // query) tolerated it.
+  //
+  // The `options` parameter above is the correct mechanism: the server applies
+  // it when the session is established, before any query can run.
   _pool.on('error', () => {
     _pool = undefined;
   });
